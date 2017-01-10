@@ -1,0 +1,16 @@
+{
+  "name": "my.new.service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Gamestop",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "serverless-enable-api-logs": "^1.1.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^3.1.0"
+  }
+}
