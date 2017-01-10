@@ -27,7 +27,7 @@ provider:
 # TODO: Add Lambda Function definitions here
 functions:
   hello:
-    handler: handler.hello
+    handler: index.hello
 
 #    EXAMPLE: Event definitions that can trigger your Lambda Functions
 #    NOTE: Please make sure to change your handler code to work with chosen events
