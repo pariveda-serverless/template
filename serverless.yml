@@ -48,7 +48,7 @@ functions:
 #      variable2: value2
 
 
-# TODO: Add CloudFormation resources here
+# TODO: Add CloudFormation resources here (if needed)
 #resources:
 #  Resources:
 #    NewResource:
