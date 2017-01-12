@@ -44,3 +44,6 @@ jspm_packages
 
 # Local DynamoDB
 shared-local-instance.db*
+
+# IntelliJ
+.idea
