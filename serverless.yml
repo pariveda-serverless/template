@@ -28,6 +28,11 @@ provider:
 functions:
   hello:
     handler: index.hello
+    events:
+      - http:
+          path: hello/world
+          method: get
+
 
 #    EXAMPLE: Event definitions that can trigger your Lambda Functions
 #    NOTE: Please make sure to change your handler code to work with chosen events
