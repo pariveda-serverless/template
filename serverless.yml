@@ -24,7 +24,6 @@ provider:
 #    - exclude-me.js
 #    - exclude-me-dir/**
 
-# TODO: Add Lambda Function definitions here
 functions:
   hello:
     handler: index.hello
@@ -34,6 +33,7 @@ functions:
           method: get
 
 
+  # TODO: Add Lambda Function definitions here
 #    EXAMPLE: Event definitions that can trigger your Lambda Functions
 #    NOTE: Please make sure to change your handler code to work with chosen events
 #    events:
