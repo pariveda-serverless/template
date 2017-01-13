@@ -3,26 +3,12 @@
 service: gs-svc-template
 
 # DO NOT MODIFY!!!
-plugins:
-  - serverless-offline
-  - serverless-enable-api-logs
-
-# DO NOT MODIFY!!!
 provider:
   name: aws
   runtime: nodejs4.3
   stage: ${opt:stage}
-  # NOTE: Codebuild passes the lambda role from the security stack to the serverless deploy command in the live CI/CD pipeline
+  # NOTE: The lambda role from the security stack is passed in via the serverless deploy command
   role: ${opt:lambdaRoleARN}
-
-# NOTE: You can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
 
 functions:
   hello:
@@ -31,37 +17,3 @@ functions:
       - http:
           path: hello/world
           method: get
-
-
-  # TODO: Add Lambda Function definitions here
-#    EXAMPLE: Event definitions that can trigger your Lambda Functions
-#    NOTE: Please make sure to change your handler code to work with chosen events
-#    events:
-#      - http:
-#          path: users/create
-#          method: get
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
-
-#    EXAMPLE: Define function environment variables here
-#    environment:
-#      variable2: value2
-
-
-# TODO: Add CloudFormation resources here (if needed)
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
-
