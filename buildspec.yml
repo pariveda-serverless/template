@@ -7,10 +7,10 @@ phases:
       # DO NOT MODIFY!!!
       - npm install -g serverless 2>&1 >/dev/null
 
-      # TODO: Update "my-new-service-security-" to match the name of your security service
+      # TODO: Update "gs-svc-template-security-" to match the name of your security service
       # NOTE: This convention assumes the security stack has exported the role arn in form [service]-[security]-[stage], and uses a delimiter of '-' not '.'
       # EXAMPLE: "gs-svc-avatar-security-"
-      - aws cloudformation list-exports --query 'Exports[?Name==`my-new-service-security-'"$STAGE"'`].Value' --output text > rolearn.txt
+      - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-'"$STAGE"'`].Value' --output text > rolearn.txt
   pre_build:
     commands:
       # DO NOT MODIFY!!!
@@ -21,9 +21,9 @@ phases:
   build:
     commands:
       # - npm prune --production
-      # TODO: Update my.new.service to match the name of your service
+      # TODO: Update gs.svc.template to match the name of your service
       # NOTE: Should exactly match the name of your repository, and use a delimiter of '.' not '-'
-      - SLS_DEBUG=true serverless deploy --stage $STAGE --serviceName my.new.service --lambdaRoleARN $(cat rolearn.txt)
+      - SLS_DEBUG=true serverless deploy --stage $STAGE --serviceName gs.svc.template --lambdaRoleARN $(cat rolearn.txt)
   post_build:
     commands:
       # Remove pipelines

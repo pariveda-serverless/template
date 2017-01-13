@@ -1,6 +1,6 @@
 # TODO: Update Serverless service name
 # NOTE: Service name must match the repository name, but replace all '.' with '-' (this is a restriction of Cloudformation naming conventions)
-service: my-new-service
+service: gs-svc-template
 
 # DO NOT MODIFY!!!
 plugins:
