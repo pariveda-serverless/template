@@ -1,13 +1,10 @@
-# TODO: Update Serverless service name
 # NOTE: Service name must match the repository name, but replace all '.' with '-' (this is a restriction of Cloudformation naming conventions)
 service: gs-svc-template
 
-# DO NOT MODIFY!!!
 plugins:
   - serverless-offline
   - serverless-enable-api-logs
 
-# DO NOT MODIFY!!!
 provider:
   name: aws
   runtime: nodejs4.3
@@ -32,35 +29,43 @@ functions:
           path: hello/world
           method: get
 
-
-  # TODO: Add Lambda Function definitions here
-#    EXAMPLE: Event definitions that can trigger your Lambda Functions
-#    NOTE: Please make sure to change your handler code to work with chosen events
+#    EXAMPLE: API Gateway Protocol=http, Path=users/create, Method=get
 #    events:
 #      - http:
 #          path: users/create
 #          method: get
-#      - s3: ${env:BUCKET}
-#      - schedule: rate(10 minutes)
-#      - sns: greeter-topic
-#      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
-#      - alexaSkill
-#      - iot:
-#          sql: "SELECT * FROM 'some_topic'"
 
-#    EXAMPLE: Define function environment variables here
+#    EXAMPLE: Lambda Function environment variables
 #    environment:
 #      variable2: value2
 
+# TODO: If needed, add additional Lambda Function definitions here
+# EXAMPLE: a more complete Lambda Function definitions
+# getDynamoDBCloudwatchMetrics:
+#   handler: get-dynamodb-cloudwatch-metrics/index.handler
+#   events:
+#     - schedule: rate(1 hour)
+#   package:
+#     include:
+#       - get-dynamodb-cloudwatch-metrics/**
+#   environment:
+#     CURRENT_TABLES_TABLE:
+#       Ref: CurrentTablesTable
 
-# TODO: Add CloudFormation resources here (if needed)
-#resources:
-#  Resources:
+resources:
+  Resources:
+
+#    TODO: If needed, add CloudFormation resources
+#    EXAMPLE: S3 Bucket 
 #    NewResource:
 #      Type: AWS::S3::Bucket
 #      Properties:
 #        BucketName: my-new-bucket
-#  Outputs:
+
+  Outputs:
+
+#     TODO: If needed, add Cloudformation Outputs
+#     EXAMPLE: Cloudformation Output
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
