@@ -1,12 +1,25 @@
 # NOTE: Service name must match the repository name, but replace all '.' with '-' (this is a restriction of Cloudformation naming conventions)
 service: gs-svc-template
 
+plugins:
+  - serverless-offline
+  - serverless-enable-api-logs
+
 provider:
   name: aws
   runtime: nodejs4.3
   stage: ${opt:stage}
-  # NOTE: The lambda role from the security stack is passed in via the serverless deploy command
+  # NOTE: Codebuild passes the lambda role from the security stack to the serverless deploy command in the live CI/CD pipeline
   role: ${opt:lambdaRoleARN}
+
+# NOTE: You can add packaging information here
+#package:
+#  include:
+#    - include-me.js
+#    - include-me-dir/**
+#  exclude:
+#    - exclude-me.js
+#    - exclude-me-dir/**
 
 functions:
   hello:
@@ -15,4 +28,45 @@ functions:
       - http:
           path: hello/world
           method: get
+
+#    EXAMPLE: API Gateway Protocol=http, Path=users/create, Method=get
+#    events:
+#      - http:
+#          path: users/create
+#          method: get
+
+#    EXAMPLE: Lambda Function environment variables
+#    environment:
+#      variable2: value2
+
+# TODO: If needed, add additional Lambda Function definitions here
+# EXAMPLE: a more complete Lambda Function definitions
+# getDynamoDBCloudwatchMetrics:
+#   handler: get-dynamodb-cloudwatch-metrics/index.handler
+#   events:
+#     - schedule: rate(1 hour)
+#   package:
+#     include:
+#       - get-dynamodb-cloudwatch-metrics/**
+#   environment:
+#     CURRENT_TABLES_TABLE:
+#       Ref: CurrentTablesTable
+
+resources:
+  Resources:
+
+#    TODO: If needed, add CloudFormation resources
+#    EXAMPLE: S3 Bucket 
+#    NewResource:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: my-new-bucket
+
+  Outputs:
+
+#     TODO: If needed, add Cloudformation Outputs
+#     EXAMPLE: Cloudformation Output
+#     NewOutput:
+#       Description: "Description for the output"
+#       Value: "Some output value"
 

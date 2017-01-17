@@ -1,0 +1,29 @@
+version:  0.1
+
+
+phases:
+  install:
+    commands:
+      # DO NOT MODIFY!!!
+      - npm install -g serverless 2>&1 >/dev/null
+
+      # NOTE: This convention assumes the security stack has exported the role arn in form [service]-[security]-[stage], and uses a delimiter of '-' not '.'
+      # EXAMPLE: "gs-svc-avatar-security-"
+      - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-'"$STAGE"'`].Value' --output text > rolearn.txt
+  pre_build:
+    commands:
+      # DO NOT MODIFY!!!
+      - npm install
+
+      # TODO: If needed, add additional steps
+      # EXAMPLE: npm lint, npm test, etc.
+  build:
+    commands:
+      # NOTE: Should exactly match the name of your repository, and use a delimiter of '.' not '-'
+      - SLS_DEBUG=true serverless deploy --stage $STAGE --serviceName gs.svc.template --lambdaRoleARN $(cat rolearn.txt)
+  post_build:
+    commands:
+      # Remove pipelines
+      # USE WITH EXTREME CAUTION!
+      # Read and understand https://gamestop.atlassian.net/wiki/x/R4CAAw before proceeding:
+      #- SLS_DEBUG=true sls remove --stage $STAGE --serviceName gs.svc.template --lambdaRoleARN $(cat rolearn.txt)
