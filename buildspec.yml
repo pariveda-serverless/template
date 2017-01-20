@@ -4,25 +4,48 @@ version:  0.1
 phases:
   install:
     commands:
-      # DO NOT MODIFY!!!
-      - npm install -g serverless 2>&1 >/dev/null
-
       # NOTE: This convention assumes the security stack has exported the role arn in form [service]-[security]-[stage], and uses a delimiter of '-' not '.'
-      # EXAMPLE: "gs-svc-avatar-security-"
+      # EXAMPLE: "gs-svc-avatar-security-alpha"
       - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-'"$STAGE"'`].Value' --output text > rolearn.txt
+      # Getting bucket name for saving encrypted per-stage secrets
+      - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-secrets-'"$STAGE"'`].Value' --output text > s3.txt
+
+      # MODIFY WITH CARE!!!
+      - npm install -g serverless 2>&1 >/dev/null
   pre_build:
     commands:
       # DO NOT MODIFY!!!
       - npm install
+
+      # Uncomment/modify secret management code below as needed.
+      # The commands assume you have uploaded files to the dedicated bucket.
+      # For instructions on updating secrets, see https://github.com/GameStopCorp/gs.serverless.support/blob/master/secrets-uploader/README.md
+      # To see an example of client-side encryption/decryption, view the commands at https://github.com/GameStopCorp/gs.aws.pipelines/blob/master/buildspec.yml
+
+      # TODO determine if you need secret management, and modify accordingly
+      #- aws configure set s3.signature_version s3v4
+      #- echo Secrets bucket is $(cat s3.txt)
+      #- aws s3api get-object --bucket $(cat s3.txt) --key secret-file.enc secret-file.txt
 
       # TODO: If needed, add additional steps
       # EXAMPLE: npm lint, npm test, etc.
   build:
     commands:
       # NOTE: Should exactly match the name of your repository, and use a delimiter of '.' not '-'
+
+      # TODO: if you want to use a secret, pass it's value along by adding another option, e.g.:
+      # SLS_DEBUG=true serverless deploy --stage $STAGE --serviceName gs.svc.template --lambdaRoleARN $(cat rolearn.txt) --secretValue "$(cat secret-file.txt)"
+      # Use the value you pass in with ${opt:secretValue} where 'secretValue' is the name of the parameter
+      # For more, see https://serverless.com/framework/docs/providers/aws/guide/variables/#referencing-cli-options
+
       - SLS_DEBUG=true serverless deploy --stage $STAGE --serviceName gs.svc.template --lambdaRoleARN $(cat rolearn.txt)
+      # TODO: ensure that after secret management changes have been made, there's only 1 'serverless deploy' command above
   post_build:
     commands:
+      - rm s3.txt
+      # TODO: Remove any files you may have downloaded from the bucket named in s3.txt
+      #- rm secret-file.txt
+
       # Remove pipelines
       # USE WITH EXTREME CAUTION!
       # Read and understand https://gamestop.atlassian.net/wiki/x/R4CAAw before proceeding:
