@@ -23,6 +23,8 @@ provider:
 
 functions:
   hello:
+    environment:
+      SECRETS_BUCKET: ${opt:secretsBucket}
     handler: index.hello
     events:
       - http:
@@ -61,6 +63,24 @@ resources:
 #      Type: AWS::S3::Bucket
 #      Properties:
 #        BucketName: my-new-bucket
+
+#    TODO: The DynamoTable definition below follows the naming conventions for data access that the security stack expects
+#    DynamoTable:
+#      Type: 'AWS::DynamoDB::Table'
+#      Properties:
+#        AttributeDefinitions:
+#          -
+#            AttributeName: id
+#            AttributeType: S
+#        KeySchema:
+#          -
+#            AttributeName: id
+#            KeyType: HASH
+#        ProvisionedThroughput:
+#          ReadCapacityUnits: 1
+#          WriteCapacityUnits: 1
+#        #Security stack must grant access to this TableName as named below (service.stage)
+#        TableName: '${self:custom.defaults.ServiceName}.${opt:stage}'
 
   Outputs:
 
