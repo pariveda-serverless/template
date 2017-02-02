@@ -5,6 +5,10 @@ plugins:
   - serverless-offline
   - serverless-enable-api-logs
 
+custom:
+  securityHash: ${file(./securityhash.txt)}
+  appHash: ${file(./apphash.txt)}
+
 provider:
   name: aws
   runtime: nodejs4.3
@@ -25,6 +29,8 @@ functions:
   hello:
     environment:
       SECRETS_BUCKET: ${opt:secretsBucket}
+      SECURITY_COMMIT_HASH: ${self:custom.securityHash}
+      APP_COMMIT_HASH: ${self:custom.appHash}
     handler: index.hello
     events:
       - http:

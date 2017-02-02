@@ -1,12 +1,17 @@
 'use strict';
 
 const AWS = require('aws-sdk');
+var Lambda = require('lambda-log-wrapper');
+var Timer = require('lambda-log-timer');
 
 /* This is a sample Lambda Function for getting started with serverless
 *
 */
 module.exports.hello = (event, context, callback) => {
+  Timer.getTimeService(main, event, context, callback);
+};
 
+function main(event, context, callback) {
   // The code snippet here shows how you can access a value stored in the encrypted S3
   // secrets bucket at runtime - see https://github.com/GameStopCorp/gs.serverless.support/blob/master/secrets-uploader/README.md
   // for detailed instructions on uploading secret data
@@ -25,7 +30,7 @@ module.exports.hello = (event, context, callback) => {
   //     }
   // });
   // end secret sample code
-
+  
   const response = {
     statusCode: 200,
     body: JSON.stringify({
@@ -35,4 +40,4 @@ module.exports.hello = (event, context, callback) => {
   };
 
   callback(null, response);
-};
+}
