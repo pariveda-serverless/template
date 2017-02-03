@@ -4,20 +4,29 @@ version:  0.1
 phases:
   install:
     commands:
+
+      # Install Serverless Framework
+      - npm install -g serverless 2>&1 >/dev/null
+
+      # Install NodeJs dependencies
+      - npm install
+
+      # Install jq
+      - apt-get update && apt-get install -y jq
+
+  pre_build:
+    commands:
       # NOTE: This convention assumes the security stack has exported the role arn in form [service]-[security]-[stage], and uses a delimiter of '-' not '.'
       # EXAMPLE: "gs-svc-avatar-security-alpha"
-      - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-'"$STAGE"'`].Value' --output text > rolearn.txt
-      # Getting bucket name for saving encrypted per-stage secrets
+      - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-'"$STAGE"'`].Value' --output text > lambdarolearn.txt
+      # Get bucket name for managing encrypted per-stage secrets
       - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-secrets-'"$STAGE"'`].Value' --output text > s3.txt
+
+      # Get github commit hashes for security and application repositories
       - aws codepipeline --region us-east-1 get-pipeline-state --name $PIPELINE | jq -r '.stageStates[0].actionStates[0].currentRevision.revisionId' > securityhash.txt
       - aws codepipeline --region us-east-1 get-pipeline-state --name $PIPELINE | jq -r '.stageStates[0].actionStates[1].currentRevision.revisionId' > apphash.txt
 
-      # MODIFY WITH CARE!!!
-      - npm install -g serverless 2>&1 >/dev/null
-  pre_build:
-    commands:
-      # DO NOT MODIFY!!!
-      - npm install
+      
 
       # Uncomment/modify secret management code below as needed.
       # The commands assume you have uploaded files to the dedicated bucket.
@@ -34,12 +43,12 @@ phases:
     commands:
       # NOTE: serviceName Should exactly match the name of your repository, and use a delimiter of '.' not '-'
 
-      - SLS_DEBUG=true serverless deploy --stage $STAGE --serviceName gs.svc.template --lambdaRoleARN $(cat rolearn.txt) --secretsBucket $(cat s3.txt)
+      - serverless deploy --serviceName gs.svc.template
   post_build:
     commands:
-      - rm s3.txt
+      - rm -rf s3.txt
 
       # Remove pipelines
       # USE WITH EXTREME CAUTION!
       # Read and understand https://gamestop.atlassian.net/wiki/x/R4CAAw before proceeding:
-      #- SLS_DEBUG=true sls remove --stage $STAGE --serviceName gs.svc.template --lambdaRoleARN $(cat rolearn.txt)
+      #- sls remove --serviceName gs.svc.template
