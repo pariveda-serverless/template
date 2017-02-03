@@ -86,7 +86,7 @@ resources:
 #          ReadCapacityUnits: 1
 #          WriteCapacityUnits: 1
 #        #Security stack must grant access to this TableName as named below (service.stage)
-#        TableName: '${self:custom.defaults.ServiceName}.${env:STAGE}'
+#        TableName: '${env:PIPELINE}.${env:STAGE}'
 
   Outputs:
 

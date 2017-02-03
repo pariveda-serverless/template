@@ -41,9 +41,8 @@ phases:
       # EXAMPLE: npm lint, npm test, etc.
   build:
     commands:
-      # NOTE: serviceName Should exactly match the name of your repository, and use a delimiter of '.' not '-'
+      - serverless deploy
 
-      - serverless deploy --serviceName gs.svc.template
   post_build:
     commands:
       - rm -rf s3.txt
