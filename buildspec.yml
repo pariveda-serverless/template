@@ -1,6 +1,5 @@
 version:  0.1
 
-
 phases:
   install:
     commands:
@@ -8,7 +7,7 @@ phases:
       # Install Serverless Framework
       - npm install -g serverless 2>&1 >/dev/null
 
-      # Install NodeJs dependencies
+      # Install additional npm modules
       - npm install
 
       # Install jq
@@ -16,22 +15,13 @@ phases:
 
   pre_build:
     commands:
-      # NOTE: This convention assumes the security stack has exported the role arn in form [service]-[security]-[stage], and uses a delimiter of '-' not '.'
-      # EXAMPLE: "gs-svc-avatar-security-alpha"
-      - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-'"$STAGE"'`].Value' --output text > lambdarolearn.txt
-      # Get bucket name for managing encrypted per-stage secrets
-      - aws cloudformation list-exports --query 'Exports[?Name==`gs-svc-template-security-secrets-'"$STAGE"'`].Value' --output text > s3.txt
-
-      # Get github commit hashes for security and application repositories
-      - aws codepipeline --region us-east-1 get-pipeline-state --name $PIPELINE | jq -r '.stageStates[0].actionStates[0].currentRevision.revisionId' > securityhash.txt
-      - aws codepipeline --region us-east-1 get-pipeline-state --name $PIPELINE | jq -r '.stageStates[0].actionStates[1].currentRevision.revisionId' > apphash.txt
-
-      
+      # Get Configuration Information
+      - chmod +x getConfig.sh && ./getConfig.sh
 
       # Uncomment/modify secret management code below as needed.
       # The commands assume you have uploaded files to the dedicated bucket.
-      # For instructions on updating secrets, see https://github.com/GameStopCorp/gs.serverless.support/blob/master/secrets-uploader/README.md
-      # To see an example of client-side encryption/decryption, view the commands at https://github.com/GameStopCorp/gs.aws.pipelines/blob/master/buildspec.yml
+      # For instructions on updating secrets, see https://github.com/pariveda-serverless/support/blob/master/secrets-uploader/README.md
+      # To see an example of client-side encryption/decryption, view the commands at https://github.com/pariveda-serverless/child-pipelines/blob/master/buildspec.yml
 
       # TODO determine if you need secret management, and modify accordingly
       - aws configure set s3.signature_version s3v4
@@ -41,13 +31,15 @@ phases:
       # EXAMPLE: npm lint, npm test, etc.
   build:
     commands:
+      # Deploy Application
       - serverless deploy
 
   post_build:
     commands:
+      # Remove S3 Bucket Name from Codebuild Memory
       - rm -rf s3.txt
 
       # Remove pipelines
       # USE WITH EXTREME CAUTION!
       # Read and understand https://gamestop.atlassian.net/wiki/x/R4CAAw before proceeding:
-      #- sls remove --serviceName gs.svc.template
+      #- sls remove --serviceName template
