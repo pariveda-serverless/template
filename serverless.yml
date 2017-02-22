@@ -15,6 +15,7 @@ provider:
   stage: ${env:STAGE}
   # NOTE: Codebuild passes the lambda role from the security stack to the serverless deploy command in the live CI/CD pipeline
   role: ${file(./lambdarolearn.txt)}
+  region: ${env:AWS_REGION}
 
 # NOTE: You can add packaging information here
 #package:
