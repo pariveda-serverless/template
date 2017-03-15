@@ -4,9 +4,6 @@ phases:
   install:
     commands:
 
-      # Install Serverless Framework
-      - npm install -g serverless 2>&1 >/dev/null
-
       # Install additional npm modules
       - npm install
 
