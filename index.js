@@ -13,7 +13,7 @@ module.exports.hello = (event, context, callback) => {
 
 function main(event, context, callback) {
   // The code snippet here shows how you can access a value stored in the encrypted S3
-  // secrets bucket at runtime - see https://github.com/GameStopCorp/gs.serverless.support/blob/master/secrets-uploader/README.md
+  // secrets bucket at runtime - see https://github.com/pariveda-serverless/support/tree/master/secrets-uploader
   // for detailed instructions on uploading secret data
   // const params = {
   //     Bucket: process.env.SECRETS_BUCKET,
