@@ -1,11 +1,11 @@
 {
-  "name": "gs.svc.template",
+  "name": "template",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
-  "author": "Gamestop",
+  "author": "",
   "license": "UNLICENSED",
   "dependencies": {
     "serverless-enable-api-logs": "^1.1.0",
