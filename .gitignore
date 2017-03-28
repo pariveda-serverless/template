@@ -47,3 +47,10 @@ shared-local-instance.db*
 
 # IntelliJ
 .idea
+
+#Serverless files
+.serverless
+
+# Role ARN (useful with --noDeploy)
+rolearn.txt
+

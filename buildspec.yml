@@ -38,5 +38,4 @@ phases:
 
       # Remove pipelines
       # USE WITH EXTREME CAUTION!
-      # Read and understand https://gamestop.atlassian.net/wiki/x/R4CAAw before proceeding:
-      #- sls remove --serviceName template
+      #- sls remove
